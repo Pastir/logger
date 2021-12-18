@@ -6,6 +6,12 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var (
+	AccessLog *zap.Logger
+	InfoLog   *zap.Logger
+	ErrorLog  *zap.Logger
+)
+
 type ConfigLog struct {
 	//Path to log dir
 	LogDir string
@@ -34,7 +40,7 @@ type ConfigLog struct {
 
 func (c *ConfigLog) SetLog() *zap.Logger {
 	access := zapcore.AddSync(&lumberjack.Logger{
-		Filename:   c.LogDir + "/" + c.Filename,
+		Filename:   c.LogDir + c.Filename,
 		MaxSize:    c.MaxSize,
 		MaxBackups: c.MaxBackups,
 		MaxAge:     c.MaxAge, //days
@@ -59,4 +65,28 @@ func (c *ConfigLog) SetLog() *zap.Logger {
 	)
 
 	return zap.New(core)
+}
+
+func init() {
+	access := ConfigLog{LogDir: "",
+		Filename:   "./access.log",
+		MaxSize:    2048,
+		MaxBackups: 5,
+		MaxAge:     7}
+	AccessLog = access.SetLog()
+
+	info := ConfigLog{LogDir: "",
+		Filename:   "./error.log",
+		MaxSize:    2048,
+		MaxBackups: 5,
+		MaxAge:     7}
+	InfoLog = info.SetLog()
+
+	error := ConfigLog{LogDir: "",
+		Filename:   "./error.log",
+		MaxSize:    2048,
+		MaxBackups: 5,
+		MaxAge:     7}
+	ErrorLog = error.SetLog()
+
 }
