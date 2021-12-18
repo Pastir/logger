@@ -66,27 +66,3 @@ func (c *ConfigLog) SetLog() *zap.Logger {
 
 	return zap.New(core)
 }
-
-func init() {
-	access := ConfigLog{LogDir: "",
-		Filename:   "./access.log",
-		MaxSize:    2048,
-		MaxBackups: 5,
-		MaxAge:     7}
-	AccessLog = access.SetLog()
-
-	info := ConfigLog{LogDir: "",
-		Filename:   "./error.log",
-		MaxSize:    2048,
-		MaxBackups: 5,
-		MaxAge:     7}
-	InfoLog = info.SetLog()
-
-	error := ConfigLog{LogDir: "",
-		Filename:   "./error.log",
-		MaxSize:    2048,
-		MaxBackups: 5,
-		MaxAge:     7}
-	ErrorLog = error.SetLog()
-
-}
